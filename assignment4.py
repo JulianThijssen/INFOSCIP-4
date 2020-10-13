@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import collections as mc
+from math import cos, sin, radians, sqrt
 
 # Triangle coordinates
 T0 = (3, 3)
@@ -82,24 +83,36 @@ def RunExperiment(n, f, k, T0, T1, T2):
     return misclassified
 
 # Write results to file
-def WriteResultsToFile(n, k, f, results):
-    file_name = "S"+str(n)+"_K"+str(k)+"_F"+str(f)
+def WriteResultsToFile(n, a, f, results):
+    file_name = "S"+str(n)+"_A"+str(a)+"_F"+str(f)
     with open(file_name, 'w') as f:
         for i in range(0, len(results)):
             f.write(str(results[i])+'\n')
 
-# Experiment parameters
-n = 100
-k = 5
-f = 0
+def FindTriangleCoords(T0, angle):
+    a = radians(angle)
+    T = 8
+    s = sqrt(T / (0.5 * sin(a)))
+    return ((T0[0] + s, T0[1]), (T0[0] + s * cos(a), T0[1] + s * sin(a)))
 
 def RunExperiment1():
     for n in range(100, 801, 100):
         print("N: " + str(n))
         results = []
         for i in range(0, 20):
-            results.append(RunExperiment(n, f, k, T0, T1, T2))
+            results.append(RunExperiment(n, 0, 5, T0, T1, T2))
 
-        WriteResultsToFile(n, k, f, results)
+        WriteResultsToFile(n, 5, 0, results)
 
-RunExperiment1()
+def RunExperiment3():
+    T0 = (0, 0)
+    for a in range(10, 91, 10):
+        print("Angle: " + str(a))
+        (T1, T2) = FindTriangleCoords(T0, a)
+        results = []
+        for i in range(0, 20):
+            results.append(RunExperiment(500, 0, 5, T0, T1, T2))
+
+        WriteResultsToFile(500, a, 0, results)
+
+RunExperiment3()

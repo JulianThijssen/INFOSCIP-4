@@ -1,15 +1,41 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import collections as mc
-from collections import Counter
 
+# Experiment parameters
 n = 500
+k = 5
 f = 0
 
+# Triangle coordinates
 T0 = (3, 3)
 T1 = (7, 3)
 T2 = (7, 7)
 
+# Draws the scatterplot of points X with colors Y (blue if True, red if False)
+def DrawPlot(X, Y, T0, T1, T2):
+    fig = plt.figure(figsize=(4, 4))
+    ax = fig.add_subplot(111)
+
+    # Draw the points in the plot
+    for i in range(0, len(Y)):
+        if (Y[i]):
+            plt.scatter(X[i][0], X[i][1], s=10, color='blue')
+        else:
+            plt.scatter(X[i][0], X[i][1], s=10, color='red')
+
+    # Draw the triangle lines
+    lines = [[T0, T1], [T1, T2], [T0, T2]]
+    lc = mc.LineCollection(lines, colors='black', linewidths=1)
+    ax.add_collection(lc)
+
+    # Draw the plot
+    ax.set_aspect('equal', adjustable='box')
+    plt.xlim(0, 10)
+    plt.ylim(0, 10)
+    plt.show()
+
+# Compute whether point is in triangle using barycentric coordinates
 def PointInTriangle(P, T0, T1, T2):
     d = ((T1[1]-T2[1]) * (T0[0]-T2[0]) + (T2[0]-T1[0]) * (T0[1]-T2[1]))
     a = ((T1[1]-T2[1]) * (P[0]-T2[0]) + (T2[0]-T1[0]) * (P[1] - T2[1])) / d
@@ -18,27 +44,11 @@ def PointInTriangle(P, T0, T1, T2):
 
     return True if (0 <= a <= 1 and  0 <= b <= 1 and 0 <= c <= 1) else False
 
-def DrawPlot(X, Y, T0, T1, T2):
-    fig = plt.figure(figsize=(4, 4))
-    ax = fig.add_subplot(111)
-
-    for i in range(0, len(Y)):
-        if (Y[i]):
-            plt.scatter(X[i][0], X[i][1], s=10, color='blue')
-        else:
-            plt.scatter(X[i][0], X[i][1], s=10, color='red')
-
-    lines = [[T0, T1], [T1, T2], [T0, T2]]
-    lc = mc.LineCollection(lines, colors='black', linewidths=1)
-    ax.add_collection(lc)
-    ax.set_aspect('equal', adjustable='box')
-    plt.xlim(0, 10)
-    plt.ylim(0, 10)
-    plt.show()
-
+# Compute distance between two points
 def ComputeDistance(a, b):
     return np.linalg.norm(np.subtract(a, b))
 
+# Classifies points in X using KNN and returns their labels in Y
 def KNN(X, S, L, k):
     Y = np.empty(len(X), dtype=bool)
     for i in range(0, len(X)):
@@ -52,6 +62,7 @@ def KNN(X, S, L, k):
         Y[i] = np.bincount(neighbours).argmax()
     return Y
 
+# Count how many labels in Y mismatch with the ground truth
 def CountMisclassified(X, Y):
     misclassified = 0
     for i in range(0, len(Y)):
@@ -60,7 +71,8 @@ def CountMisclassified(X, Y):
             misclassified += 1
     return misclassified
 
-def RunExperiment(n, f, T0, T1, T2, k):
+# Run one experiment with given parameters
+def RunExperiment(n, f, k, T0, T1, T2):
     S = np.random.uniform(0, 10, (n, 2))
 
     L = []
@@ -69,10 +81,9 @@ def RunExperiment(n, f, T0, T1, T2, k):
         L.append(PointInTriangle(P, T0, T1, T2))
 
     X = np.random.uniform(0, 10, (1000, 2))
-    
     Y = KNN(X, S, L, k)
     misclassified = CountMisclassified(X, Y)
     print(misclassified)
     #DrawPlot(X, Y, T0, T1, T2)
 
-RunExperiment(n, f, T0, T1, T2, 7)
+RunExperiment(n, f, k, T0, T1, T2)

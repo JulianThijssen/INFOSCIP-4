@@ -2,11 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import collections as mc
 
-# Experiment parameters
-n = 500
-k = 5
-f = 0
-
 # Triangle coordinates
 T0 = (3, 3)
 T1 = (7, 3)
@@ -80,10 +75,31 @@ def RunExperiment(n, f, k, T0, T1, T2):
         P = S[i]
         L.append(PointInTriangle(P, T0, T1, T2))
 
-    X = np.random.uniform(0, 10, (1000, 2))
+    X = np.random.uniform(0, 10, (10000, 2))
     Y = KNN(X, S, L, k)
     misclassified = CountMisclassified(X, Y)
     print(misclassified)
-    #DrawPlot(X, Y, T0, T1, T2)
+    return misclassified
 
-RunExperiment(n, f, k, T0, T1, T2)
+# Write results to file
+def WriteResultsToFile(n, k, f, results):
+    file_name = "S"+str(n)+"_K"+str(k)+"_F"+str(f)
+    with open(file_name, 'w') as f:
+        for i in range(0, len(results)):
+            f.write(str(results[i])+'\n')
+
+# Experiment parameters
+n = 100
+k = 5
+f = 0
+
+def RunExperiment1():
+    for n in range(100, 801, 100):
+        print("N: " + str(n))
+        results = []
+        for i in range(0, 20):
+            results.append(RunExperiment(n, f, k, T0, T1, T2))
+
+        WriteResultsToFile(n, k, f, results)
+
+RunExperiment1()

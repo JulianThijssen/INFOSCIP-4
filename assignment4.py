@@ -3,11 +3,6 @@ import matplotlib.pyplot as plt
 from matplotlib import collections as mc
 from math import cos, sin, radians, sqrt
 
-# Triangle coordinates
-T0 = (3, 3)
-T1 = (7, 3)
-T2 = (7, 7)
-
 # Draws the scatterplot of points X with colors Y (blue if True, red if False)
 def DrawPlot(X, Y, T0, T1, T2):
     fig = plt.figure(figsize=(4, 4))
@@ -59,7 +54,7 @@ def KNN(X, S, L, k):
     return Y
 
 # Count how many labels in Y mismatch with the ground truth
-def CountMisclassified(X, Y):
+def CountMisclassified(X, Y, T0, T1, T2):
     misclassified = 0
     for i in range(0, len(Y)):
         x = X[i]
@@ -71,14 +66,15 @@ def CountMisclassified(X, Y):
 def RunExperiment(n, f, k, T0, T1, T2):
     S = np.random.uniform(0, 10, (n, 2))
 
-    L = []
+    L = np.empty(n, dtype=bool)
     for i in range(0, n):
         P = S[i]
-        L.append(PointInTriangle(P, T0, T1, T2))
+        L[i] = PointInTriangle(P, T0, T1, T2)
 
     X = np.random.uniform(0, 10, (10000, 2))
     Y = KNN(X, S, L, k)
-    misclassified = CountMisclassified(X, Y)
+    misclassified = CountMisclassified(X, Y, T0, T1, T2)
+    #DrawPlot(X, Y, T0, T1, T2)
     print(misclassified)
     return misclassified
 
@@ -93,9 +89,18 @@ def FindTriangleCoords(T0, angle):
     a = radians(angle)
     T = 8
     s = sqrt(T / (0.5 * sin(a)))
-    return ((T0[0] + s, T0[1]), (T0[0] + s * cos(a), T0[1] + s * sin(a)))
+    h_offset = (10-s) * 0.5
+    v_offset = (10-(s * sin(a))) * 0.5
+    print(s)
+    T0 = (10-h_offset, 0+v_offset)
+    return (T0, (T0[0] - s, T0[1]), (T0[0] - s * cos(a), T0[1] + s * sin(a)))
 
 def RunExperiment1():
+    # Triangle coordinates
+    T0 = (3, 3)
+    T1 = (7, 3)
+    T2 = (7, 7)
+
     for n in range(100, 801, 100):
         print("N: " + str(n))
         results = []
@@ -105,10 +110,13 @@ def RunExperiment1():
         WriteResultsToFile(n, 5, 0, results)
 
 def RunExperiment3():
-    T0 = (0, 0)
+    T0 = (9, 3)
     for a in range(10, 91, 10):
         print("Angle: " + str(a))
-        (T1, T2) = FindTriangleCoords(T0, a)
+        (T0, T1, T2) = FindTriangleCoords(T0, a)
+        print(T0)
+        print(T1)
+        print(T2)
         results = []
         for i in range(0, 20):
             results.append(RunExperiment(500, 0, 5, T0, T1, T2))

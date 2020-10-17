@@ -71,6 +71,10 @@ def RunExperiment(n, f, k, T0, T1, T2):
         P = S[i]
         L[i] = PointInTriangle(P, T0, T1, T2)
 
+        # Reverse color with probability f
+        if (np.random.uniform() < f):
+            L[i] = not L[i]
+
     X = np.random.uniform(0, 10, (10000, 2))
     Y = KNN(X, S, L, k)
     misclassified = CountMisclassified(X, Y, T0, T1, T2)
@@ -108,6 +112,20 @@ def RunExperiment1():
             results.append(RunExperiment(n, 0, 5, T0, T1, T2))
 
         WriteResultsToFile(n, 0, 0, results)
+
+def RunExperiment2():
+    # Triangle coordinates
+    T0 = (3, 3)
+    T1 = (7, 3)
+    T2 = (7, 7)
+
+    for f in np.arange(0.0, 0.31, 0.05):
+        print("F: " + str(f))
+        results = []
+        for i in range(0, 20):
+            results.append(RunExperiment(500, f, 5, T0, T1, T2))
+
+        WriteResultsToFile(500, f, 0, results)
 
 def RunExperiment3():
     T0 = (9, 3)

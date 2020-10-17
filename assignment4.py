@@ -107,7 +107,7 @@ def RunExperiment1():
         for i in range(0, 20):
             results.append(RunExperiment(n, 0, 5, T0, T1, T2))
 
-        WriteResultsToFile(n, 5, 0, results)
+        WriteResultsToFile(n, 0, 0, results)
 
 def RunExperiment3():
     T0 = (9, 3)
@@ -123,4 +123,5 @@ def RunExperiment3():
 
         WriteResultsToFile(500, a, 0, results)
 
-RunExperiment3()
+#RunExperiment1()
+#RunExperiment3()

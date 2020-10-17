@@ -11,9 +11,9 @@ def ReadData(fileName):
         return (avgMistakes, stdDev)
 
 # Experiment 1 filenames
-fileNames1 = ['S100_A0_F0', 'S200_A0_F0', 'S300_A0_F0', 'S400_A0_F0', 'S500_A0_F0', 'S600_A0_F0', 'S700_A0_F0', 'S800_A0_F0']
+fileNames1 = ['S500_A10_F0', 'S500_A20_F0', 'S500_A30_F0', 'S500_A40_F0', 'S500_A50_F0', 'S500_A60_F0', 'S500_A70_F0', 'S500_A80_F0', 'S500_A90_F0']
 
-X = [100, 200, 300, 400, 500, 600, 700, 800]
+X = [10, 20, 30, 40, 50, 60, 70, 80, 90]
 Y = np.empty(len(fileNames1), dtype=np.float32)
 StdDev = np.empty(len(fileNames1), dtype=np.float32)
 
@@ -26,8 +26,8 @@ fig = plt.figure()
 ax = plt.axes()
 
 plt.errorbar(X, Y, StdDev, linestyle=':', capsize=3, marker='o', elinewidth=1);
-plt.xlabel("Density of S (n)")
+plt.xlabel("Triangle Angle (A)")
 plt.ylabel("Number of misclassified points")
 
-plt.savefig("Experiment_1_Figure")
+plt.savefig("Experiment_3_Figure")
 plt.show()

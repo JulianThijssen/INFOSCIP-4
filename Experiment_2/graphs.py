@@ -25,8 +25,10 @@ print(StdDev)
 fig = plt.figure()
 ax = plt.axes()
 
-plt.plot(X, Y);
+plt.errorbar(X, Y, StdDev, linestyle=':', capsize=3, marker='o', elinewidth=1);
 plt.xlabel("Reversal factor (f)")
 plt.ylabel("Number of misclassified points")
 
+plt.grid()
+plt.savefig("Experiment_2_Figure")
 plt.show()

@@ -25,10 +25,11 @@ print(StdDev)
 fig = plt.figure()
 ax = plt.axes()
 
+kwargs = {'linestyle' : '--', 'alpha' : 0.5}
 plt.errorbar(X, Y, StdDev, linestyle=':', capsize=3, marker='o', elinewidth=1);
-plt.xlabel("Reversal factor (f)")
+plt.xlabel("Outlier fraction (f)")
 plt.ylabel("Number of misclassified points")
 
-plt.grid()
+plt.grid(True, **kwargs)
 plt.savefig("Experiment_2_Figure")
 plt.show()

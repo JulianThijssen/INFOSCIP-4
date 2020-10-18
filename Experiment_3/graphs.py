@@ -10,7 +10,7 @@ def ReadData(fileName):
         stdDev = np.std(results)
         return (avgMistakes, stdDev)
 
-# Experiment 1 filenames
+# Experiment 3 filenames
 fileNames1 = ['S500_A10_F0', 'S500_A20_F0', 'S500_A30_F0', 'S500_A40_F0', 'S500_A50_F0', 'S500_A60_F0', 'S500_A70_F0', 'S500_A80_F0', 'S500_A90_F0']
 
 X = [10, 20, 30, 40, 50, 60, 70, 80, 90]
@@ -25,9 +25,11 @@ print(StdDev)
 fig = plt.figure()
 ax = plt.axes()
 
+kwargs = {'linestyle' : '--', 'alpha' : 0.5}
 plt.errorbar(X, Y, StdDev, linestyle=':', capsize=3, marker='o', elinewidth=1);
-plt.xlabel("Triangle Angle (A)")
+plt.xlabel("Triangle Angle (Degrees)")
 plt.ylabel("Number of misclassified points")
 
+plt.grid(True, **kwargs)
 plt.savefig("Experiment_3_Figure")
 plt.show()
